@@ -1,6 +1,3 @@
-##Generating data from latent factor model
-
-library(MASS)
 
 # Set parameters
 rep = 5
@@ -23,13 +20,13 @@ for (h in 1:k) {
 mu = rep(0, p)
 Ot = tcrossprod(Lambda) + 0.01 * diag(p)
 
-# Generate data
-temp2 = matrix( rnorm( N * p), N, p )
-dat = tcrossprod(temp2, chol(Ot))
+library(testthat)
+expect_equal(Ot, crossprod(chol(Ot)))
 
-ktr = k
-rktr = qr(Lambda)$rank
-Lamtr = Lambda
+library(microbenchmark)
+microbenchmark({
+  temp2 = matrix( rnorm( N * p), N, p )
+  dat = tcrossprod(temp2, chol(Ot))
+},
+dat = mvrnorm(N, mu, Ot))
 
-# Save data to a file
-save(dat, Ot, rep, n, p, ktr, rktr, Lamtr, file = paste0("DataGen_p[", p, "]ktr[", k, "]rep[", rep, "]"))
