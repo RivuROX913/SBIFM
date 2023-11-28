@@ -1,13 +1,9 @@
 ##Generating data from latent factor model
 
+##library
 library(MASS)
 
-# Set parameters
-rep = 5
-n = 200
-N = n * rep
-p = 30
-k = 10
+generateData = function( n, p, k, rep ){
 
 # Initialize variables
 Lambda = matrix(0, p, k)
@@ -31,5 +27,8 @@ ktr = k
 rktr = qr(Lambda)$rank
 Lamtr = Lambda
 
-# Save data to a file
-save(dat, Ot, rep, n, p, ktr, rktr, Lamtr, file = paste0("DataGen_p[", p, "]ktr[", k, "]rep[", rep, "]"))
+#return data as output
+return(list("data" = dat, "Var" = Ot, "repitition" = rep, "n" = n, "p" =p,
+            "k.train" = ktr, "rank.train" = rktr, "Lambda.train" = Lamtr))
+
+}
