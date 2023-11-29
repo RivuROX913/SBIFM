@@ -4,13 +4,6 @@
 using namespace Rcpp;
 using namespace arma;
 
-//'
-//'
-//'
-//'
-//'
-
-
 // [[Rcpp::export]]
 arma::mat updateEta_c(arma::mat Lambda, arma::vec ps, int k, arma::mat Y, int n) {
   mat Lmsg = Lambda.each_col() % ps;
@@ -33,7 +26,6 @@ arma::mat updateEta_c(arma::mat Lambda, arma::vec ps, int k, arma::mat Y, int n)
   return eta;
 }
 
-
 // [[Rcpp::export]]
 arma::mat updateLambda_c(arma::mat eta, arma::mat Plam, arma::vec ps, arma::mat Y, int k, int p) {
   arma::mat eta2 = eta.t() * eta;
@@ -53,7 +45,6 @@ arma::mat updateLambda_c(arma::mat eta, arma::mat Plam, arma::vec ps, arma::mat 
   return Lambda;
 }
 
-
 // [[Rcpp::export]]
 arma::mat updatePsi_c(double df, arma::mat Lambda, arma::vec tauh, int p, int k) {
   mat Lambda2 = Lambda % Lambda;
@@ -68,7 +59,6 @@ arma::mat updatePsi_c(double df, arma::mat Lambda, arma::vec tauh, int p, int k)
 
   return psijh;
 }
-
 
 // [[Rcpp::export]]
 List updateDeltaTauh_c(arma::mat Lambda, arma::mat psijh, double ad1, int p, int k,
@@ -95,7 +85,6 @@ List updateDeltaTauh_c(arma::mat Lambda, arma::mat psijh, double ad1, int p, int
 
   return List::create(Named("delta") = newDelta, Named("tauh") = newTauh);
 }
-
 
 // [[Rcpp::export]]
 arma::vec updateSigma_c(arma::vec tmp2, int p, double as, int n, double bs) {

@@ -1,12 +1,15 @@
 ## Gibbs sampler for covariance estimation
 # using mgps prior on factor loadings
-
 #' Estimates loading matrix and covariance for factor model data
 #'
 #' @import Matrix
 #' @import Rcpp
 #' @import RcppArmadillo
-#'
+#' @include Datagen.R
+#' @importFrom Rcpp sourceCpp
+#' @importFrom stats rgamma
+#' @importFrom stats rnorm
+#' @useDynLib SBIFM, .registration = TRUE
 #' @param data List, factor model data generated through generateData function
 #' @param nrun Numeric, number of iterations to run the algorithm
 #' @param burn Numeric, number of iterations to ignore
@@ -18,8 +21,7 @@
 #' @export
 #'
 #' @examples
-#' # newData = generateData( generateData( n = 1000, p = 50, k = 10, rep = 5 )
-#' Estimates = GibbsCov(data = newData, nrun = 20000, burn = 5000, thin = 3, epsilon = 1e-3)
+#' GibbsCov(data = generateData( n = 1000, p = 50, k = 10, rep = 5 ), nrun = 20000, burn = 5000, thin = 3, epsilon = 1e-3)
 
 
 GibbsCov = function(data, nrun, burn, thin, epsilon)

@@ -15,4 +15,11 @@ LinkingTo:
     Rcpp,
     RcppArmadillo
 Imports: 
-    Rcpp
+    MASS,
+    Matrix,
+    Rcpp,
+    RcppArmadillo
+Collate: 
+    'Datagen.R'
+    'GibbsSamplerforCov.R'
+    'RcppExports.R'
