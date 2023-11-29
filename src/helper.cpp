@@ -12,7 +12,7 @@ using namespace arma;
 
 
 // [[Rcpp::export]]
-mat updateEta_c(mat Lambda, vec ps, int k, mat Y, int n) {
+arma::mat updateEta_c(arma::mat Lambda, arma::vec ps, int k, arma::mat Y, int n) {
   mat Lmsg = Lambda.each_col() % ps;
   mat Veta1 = eye<mat>(k, k) + trans(Lambda) * Lmsg;
 
@@ -55,7 +55,7 @@ arma::mat updateLambda_c(arma::mat eta, arma::mat Plam, arma::vec ps, arma::mat 
 
 
 // [[Rcpp::export]]
-mat updatePsi_c(double df, mat Lambda, vec tauh, int p, int k) {
+arma::mat updatePsi_c(double df, arma::mat Lambda, arma::vec tauh, int p, int k) {
   mat Lambda2 = Lambda % Lambda;
   mat df2 = df / 2 + Lambda2.each_row() % tauh.t() / 2;
   mat psijh(p, k, fill::zeros);
@@ -71,8 +71,8 @@ mat updatePsi_c(double df, mat Lambda, vec tauh, int p, int k) {
 
 
 // [[Rcpp::export]]
-List updateDeltaTauh_c(mat Lambda, mat psijh, double ad1, int p, int k,
-                       double bd1, vec delta, vec tauh, double ad2, double bd2) {
+List updateDeltaTauh_c(arma::mat Lambda, arma::mat psijh, double ad1, int p, int k,
+                       double bd1, arma::vec delta, arma::vec tauh, double ad2, double bd2) {
 
   mat temp = Lambda % Lambda % psijh;
   vec tmp = sum(temp, 0).t();  // Sum along the rows and transpose

@@ -8,7 +8,7 @@ library(RcppArmadillo)
 ##########################################################################################
 ##exports
 
-sourceCpp("test.cpp")
+sourceCpp("helper.cpp")
 
 updateEta = function(Lambda, ps, k, Y, n)
 {
@@ -201,22 +201,22 @@ for (g in 1:rep) {
 
     # Make adaptations
     if(k > 1) {
-    tmp3 = Ytil + Y
-    S_h = c()
-    for(h in 1:k)
-      S_h[h] = eta[,h] %*% tmp3 %*% Lambda[,h]
-    mindex = which.min(S_h)
-    num = sum(tmp2) + sum(S_h[-mindex])
-    den = sum(Y^2)
-    if(num / den > 0.999)
-    {
-      k = k - 1
-      Lambda = Lambda[, -mindex]
-      eta = eta[, -mindex]
-      delta = delta[-mindex]
-      tauh = cumprod(delta)  # Global shrinkage coefficients
-      Plam = Plam[, -mindex]
-    }
+      tmp3 = Ytil + Y
+      S_h = c()
+      for(h in 1:k)
+        S_h[h] = eta[,h] %*% tmp3 %*% Lambda[,h]
+      mindex = which.min(S_h)
+      num = sum(tmp2) + sum(S_h[-mindex])
+      den = sum(Y^2)
+      if(num / den > 0.999)
+      {
+        k = k - 1
+        Lambda = Lambda[, -mindex]
+        eta = eta[, -mindex]
+        delta = delta[-mindex]
+        tauh = cumprod(delta)  # Global shrinkage coefficients
+        Plam = Plam[, -mindex]
+      }
     }
 
     nofout[i + 1] = k
