@@ -1,18 +1,37 @@
-# Gibbs sampler for covariance estimation
+## Gibbs sampler for covariance estimation
 # using mgps prior on factor loadings
 
-library(Matrix)
-# Define global constants
-nrun = 20000
-burn = 5000
-thin = 1
-sp = (nrun - burn) / thin  # Number of posterior samples
+#' Estimates loading matrix and covariance for factor model data
+#'
+#' @import Matrix
+#' @import Rcpp
+#' @import RcppArmadillo
+#'
+#' @param data List, factor model data generated through generateData function
+#' @param nrun Numeric, number of iterations to run the algorithm
+#' @param burn Numeric, number of iterations to ignore
+#' @param thin Numeric, thinning parameter for the outcome
+#' @param epsilon proper fraction, usd in truncation of factors
+#'
+#' @return List containing loading matrix, variance and error in estimation
+#'
+#' @export
+#'
+#' @examples
+#' # newData = generateData( generateData( n = 1000, p = 50, k = 10, rep = 5 )
+#' Estimates = GibbsCov(data = newData, nrun = 20000, burn = 5000, thin = 3, epsilon = 1e-3)
 
-kinit = p  # Number of factors to start with
-b0 = 1
-b1 = 0.0005
-epsilon = 1e-3  # Threshold limit
-prop = 1.00  # Proportion of redundant elements within columns
+
+GibbsCov = function(data, nrun, burn, thin, epsilon)
+{
+  ##definitions
+  dat = data$data
+  Ot = data$Var
+  rep = data$repitition
+  n = data$n
+  p = data$p
+  sp = (nrun - burn) / thin  # Number of posterior samples
+
 
 # Initialize arrays for storing results
 mserep = matrix(0, nrow = rep, ncol = 3)  # MSE, absolute bias (avg and max) in estimating cov matrix
@@ -29,11 +48,9 @@ for (g in 1:rep) {
   tY = t(Y) - M
   VY = rowMeans(tY^2)
   Y = t( tY / sqrt(VY) )
-  #vhat = sum((t(Y) * sqrt(VY))^2)
 
   Ot1 = Ot / as.numeric(sqrt(crossprod(VY)))  # True dispersion matrix of the transformed data
-  num = 0
-  k = kinit  # Number of factors to start with
+  k = p  # Number of factors to start with
 
   # Define hyperparameter values
   as = 1
@@ -70,73 +87,46 @@ for (g in 1:rep) {
   # Start Gibbs sampling
   for (i in 1:nrun) {
     # Update eta
-    Lmsg = Lambda * ps
-    Veta1 = diag(1, k) + t(Lambda) %*% Lmsg
-    S = chol(Veta1)
-    Veta = chol2inv( S )
-    Meta = Y %*% Lmsg %*% Veta
-    eta = Meta + matrix(rnorm(n * k), n, k) %*% S  # Update eta in a block
+    eta = updateEta_c(Lambda, ps, k, Y, n)
 
-    # Update Lambda (rue & held)
-    eta2 = t(eta) %*% eta
-    for (j in 1:p) {
-      Qlam = diag(Plam[j, ]) + ps[j] * eta2
-      blam = ps[j] * t(eta) %*% Y[, j]
-      Llam = chol(Qlam)
-      zlam = matrix(rnorm(k), k, 1)
-      vlam = chol2inv(Llam)
-      mlam = vlam %*% blam
-      ylam = vlam %*% zlam
-      Lambda[j, ] = (ylam + mlam)
-    }
+    # Update Lambda
+    Lambda = updateLambda_c(eta, Plam, ps, Y, k, p)
 
     # Update psi_{jh}'s
-    df2 = df / 2 + t(Lambda^2) * tauh / 2
-    psijh = matrix( 0, p , k  )
-    for(j in 1:p)
-    for(h in 1:k)
-    psijh[j, h] = rgamma(1, df / 2 + 0.5, df2[h, j])
+    psijh = updatePsi_c(df, Lambda, tauh, p, k)
 
     # Update delta & tauh
-    tmp = colSums(Lambda^2 * psijh)
-    ad = ad1 + 0.5 * p * k
-    bd = bd1 + 0.5 * (1 / delta[1]) * crossprod(tauh ,tmp)
-    delta[1] = rgamma(1, ad, bd)
-    tauh = cumprod(delta)
-
-    for (h in 2:k) {
-      ad = ad2 + 0.5 * p * (k - h + 1)
-      bd = bd2 + 0.5 * (1 / delta[h]) * crossprod(tauh[h:k] ,tmp[h:k])
-      delta[h] = rgamma(1, ad, bd)
-      tauh = cumprod(delta)
-    }
+    out = updateDeltaTauh_c(Lambda, psijh, ad1, p, k, bd1, delta, tauh, ad2, bd2)
+    delta = out$delta
+    tauh = as.vector(out$tauh)
 
     # Update Sigma
     Ytil = Y - eta %*% t(Lambda)
     tmp2 = colSums(Ytil^2)
-    for (j in 1:p)
-    ps[j] = rgamma(1, as + 0.5 * n, bs + 0.5 * tmp2[j])
-    Sigma = diag(1 / ps)
+    ps = updateSigma_c(tmp2, p, as, n, bs)
+    Sigma = diag(1 / as.vector(ps))
 
     # Update precision parameters
     Plam = t( t(psijh) * tauh )
 
     # Make adaptations
-    tmp3 = Ytil + Y
-    S_h = rep(0, k)
-    for(h in 1:k)
-      S_h[h] = eta[,h] %*% tmp3 %*% Lambda[,h]
-    mindex = which.min(S_h)
-    num = sum(tmp2) + sum(S_h[-mindex])
-    den = sum(Y^2)
-    if( num / den > 0.999 )
-    {
-      k = k - 1
-      Lambda = Lambda[, -mindex]
-      eta = eta[, -mindex]
-      delta = delta[-mindex]
-      tauh = cumprod(delta)  # Global shrinkage coefficients
-      Plam = Plam[, -mindex]
+    if(k > 1) {
+      tmp3 = Ytil + Y
+      S_h = c()
+      for(h in 1:k)
+        S_h[h] = eta[,h] %*% tmp3 %*% Lambda[,h]
+      mindex = which.min(S_h)
+      num = sum(tmp2) + sum(S_h[-mindex])
+      den = sum(Y^2)
+      if(num / den > 1 - epsilon)
+      {
+        k = k - 1
+        Lambda = Lambda[, -mindex]
+        eta = eta[, -mindex]
+        delta = delta[-mindex]
+        tauh = cumprod(delta)  # Global shrinkage coefficients
+        Plam = Plam[, -mindex]
+      }
     }
 
     nofout[i + 1] = k
@@ -147,11 +137,10 @@ for (g in 1:rep) {
       Omega1 = Omega * as.numeric(sqrt(crossprod(VY)))
       Omegaout = Omegaout + as.vector(Omega) / sp
       Omega1out = Omega1out + as.vector(Omega1) / sp
-      nof1out[(i - burn) / thin] = nofout[(i - burn) / thin] - num * (num > 0)
+      nof1out[(i - burn) / thin] = nofout[(i - burn) / thin]
     }
-
     if (i %% 1000 == 0) {
-      cat(i, "\n")
+      cat(" " , i, "\n")
     }
   }
 
@@ -168,6 +157,6 @@ for (g in 1:rep) {
   cat(paste("end replicate", g, "\n"))
   cat("--------------------\n")
 }
-
-# Display elapsed time
-
+  return(list( "Lambda" = Lambda, "eta" = eta, "Sigma" = 1 / ps, "MSE" = mserep,
+               "MSE1" = mse1rep, "Factor" = nofrep[,sp-1]))
+}

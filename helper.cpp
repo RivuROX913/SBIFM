@@ -4,6 +4,13 @@
 using namespace Rcpp;
 using namespace arma;
 
+//'
+//'
+//'
+//'
+//'
+
+
 // [[Rcpp::export]]
 mat updateEta_c(mat Lambda, vec ps, int k, mat Y, int n) {
   mat Lmsg = Lambda.each_col() % ps;

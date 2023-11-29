@@ -1,6 +1,8 @@
 ##Generating data from latent factor model
 #' Generates data-sets from latent factor model
 #'
+#' @import MASS
+#'
 #' @param n Numeric, number of data points in each repetition
 #' @param p Numeric, dimension of each data point
 #' @param k Numeric, number of factors to generate from
@@ -12,9 +14,6 @@
 #'
 #' @examples
 #' newData = generateData( n = 1000, p = 50, k = 10, rep = 5 )
-
-##library
-library(MASS)
 
 generateData = function( n, p, k, rep ){
 
