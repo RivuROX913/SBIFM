@@ -21,7 +21,7 @@
 #' @export
 #'
 #' @examples
-#' GibbsCov(data = generateData( n = 1000, p = 50, k = 10, rep = 5 ), nrun = 20000, burn = 5000, thin = 3, epsilon = 1e-3)
+#' GibbsCov(data = generateData( n = 200, p = 30, k = 10, rep = 1 ), nrun = 10000, burn = 2000, thin = 1, epsilon = 1e-4)
 
 
 GibbsCov = function(data, nrun, burn, thin, epsilon)

@@ -9,7 +9,8 @@
 #' @param k Numeric, number of factors to generate from
 #' @param rep Numeric, number of repetitions
 #'
-#' @return list containing data-sets generated from latent factor model with error variance 0.01, true variance, Lambda and its rank.
+#' @return list, containing data-sets generated from latent factor model with error variance 0.01, true variance, Lambda and its rank.
+#' The replicates are ammended row-wise
 #'
 #' @export
 #'
@@ -38,6 +39,8 @@ generateData = function( n, p, k, rep ){
   rktr = qr(Lambda)$rank
   Lamtr = Lambda
   #return data as output
-  return(list("data" = dat, "Var" = Ot, "repitition" = rep, "n" = n, "p" =p,
+  return(list("data" = dat, "Var" = Ot, "repilicate
+              " = rep, "n" = n, "p" =p,
               "k.train" = ktr, "rank.train" = rktr, "Lambda.train" = Lamtr))
 }
++

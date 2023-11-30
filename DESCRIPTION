@@ -7,7 +7,7 @@ Authors@R:
   email = "rivurox@tamu.edu",
   role = c("aut", "cre")),
   person("Anirban", "Bhattacharya",
-  email = "anirbanb@tamu.edu",role = "aut"))
+  email = "anirbanb@stat.tamu.edu",role = "aut"))
 Description: What the package does (one paragraph).
 License: GPL (>= 3)
 Encoding: UTF-8

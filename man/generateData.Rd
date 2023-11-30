@@ -16,7 +16,8 @@ generateData(n, p, k, rep)
 \item{rep}{Numeric, number of repetitions}
 }
 \value{
-list containing data-sets generated from latent factor model with error variance 0.01, true variance, Lambda and its rank.
+list, containing data-sets generated from latent factor model with error variance 0.01, true variance, Lambda and its rank.
+The replicates are ammended row-wise
 }
 \description{
 Generates data-sets from latent factor model
