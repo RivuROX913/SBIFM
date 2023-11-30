@@ -3,7 +3,11 @@ Type: Package
 Title: What the Package Does (One Line, Title Case)
 Version: 0.0.0.9000
 Authors@R: 
-    person("Sayantan", "Roy", , "rivurox@tamu.edu", role = c("aut", "cre"))
+  c(person("Sayantan", "Roy",
+  email = "rivurox@tamu.edu",
+  role = c("aut", "cre")),
+  person("Anirban", "Bhattacharya",
+  email = "anirbanb@tamu.edu",role = "aut"))
 Description: What the package does (one paragraph).
 License: GPL (>= 3)
 Encoding: UTF-8
