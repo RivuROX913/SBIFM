@@ -24,5 +24,6 @@ List containing loading matrix, variance and error in estimation
 Estimates loading matrix and covariance for factor model data
 }
 \examples{
-GibbsCov(data = generateData( n = 200, p = 30, k = 10, rep = 1 ), nrun = 10000, burn = 2000, thin = 1, epsilon = 1e-4)
+newdata = generateData( n = 100, p = 50, k = 10, rep = 1 )
+GibbsCov(data = newdata, nrun = 2000, burn = 500, thin = 3, epsilon = 1e-4)
 }

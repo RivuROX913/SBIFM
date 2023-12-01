@@ -7,10 +7,10 @@
 #' @param n Numeric, number of data points in each repetition
 #' @param p Numeric, dimension of each data point
 #' @param k Numeric, number of factors to generate from
-#' @param rep Numeric, number of repetitions
+#' @param rep Numeric, number of replicates in data-set
 #'
-#' @return list, containing data-sets generated from latent factor model with error variance 0.01, true variance, Lambda and its rank.
-#' The replicates are ammended row-wise
+#' @return list, containing data-sets generated from latent factor model with IID error with variance 0.01, true covariance matrix, Lambda and its rank.
+#' The data replicates are ammended row-wise.
 #'
 #' @export
 #'
