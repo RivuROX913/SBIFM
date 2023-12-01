@@ -43,4 +43,3 @@ generateData = function( n, p, k, rep ){
               " = rep, "n" = n, "p" =p,
               "k.train" = ktr, "rank.train" = rktr, "Lambda.train" = Lamtr))
 }
-+
