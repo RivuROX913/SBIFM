@@ -16,7 +16,20 @@
 #' @param thin Numeric, thinning parameter for the outcome
 #' @param epsilon proper fraction, used in truncation of factors
 #'
-#' @return List containing loading matrix, variance and error in estimation
+#' @return List containing covariance matrix, error variance, error is estimating the covariance (if true covariance is supplied), number of chosen factors and posterior estimate of factors accross MCMC iterations.
+#'
+#' @references
+#' Bhattacharya et al. (2011). "Sparse Bayesian Infinite Factor Models",
+#' \emph{Biometrika},
+#' <https://doi.org/10.1093/biomet/asr013>
+#'
+#' @references Schiavon, Lorenzo, and Antonio Canale. (2020)
+#'  "On the truncation criteria in infinite factor models." \emph{Stat}
+#'  < https://doi.org/10.1002/sta4.298>
+#'
+#' @details
+#' abc ...
+#'
 #'
 #' @export
 #'
@@ -52,7 +65,7 @@ GibbsCov = function(data, nrun, burn, thin, epsilon)
     mse1rep = matrix(0, nrow = rep, ncol = 3)  # Same as above in the original scale in estimating cov matrix
   }
   nofrep = matrix(0, nrow = rep, ncol = sp)  # Evolution of factors across replicates
-  postfrep = rep(0, rep)
+  postfrep = rep(0, sp)
   Sigmarep = rep(0, p)
 
 for (g in 1:rep) {
@@ -157,7 +170,7 @@ for (g in 1:rep) {
       Omegaout = Omegaout + Omega / sp
       Omega1out = Omega1out + Omega1 / sp
       nof1out[(i - burn) / thin] = nofout[(i - burn) / thin]
-      Sigmarep = Sigmarep + as.numeric(sqrt(crossprod(VY))) / ps
+      Sigmarep = Sigmarep + as.numeric(sqrt(crossprod(VY))) * Sigma
     }
     if (i %% 1000 == 0) {
       cat(" " , i, "\n")
@@ -180,7 +193,7 @@ for (g in 1:rep) {
   nofrep[g, ] = nof1out
 
   # 3. posterior estimate of factors
-  postfrep[g] = mean(nof1out)
+  postfrep = colMeans(nofrep)
 
   cat(paste("end replicate", g, "\n"))
   cat("--------------------\n")
@@ -191,6 +204,6 @@ for (g in 1:rep) {
                  "Factor" = nofrep[,sp-1], "post.factor" = postfrep))
   } else {
     return(list( "Cov" = Omega1out, "Sigma" = Sigma1rep,
-                 "MSE1" = mse1rep, "Factor" = nofrep[,sp-1], "post.factor" = postfrep))
+                 "MSE" = mse1rep, "Factor" = nofrep[,sp-1], "post.factor" = postfrep))
   }
 }

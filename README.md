@@ -152,7 +152,6 @@ out = GibbsCov(data, 20000, 5000, 3, 1e-4)
 #> --------------------
 
 
-
 # Load the data
 data <- psych::bfi[, 1:25]
 

@@ -18,12 +18,24 @@ GibbsCov(data, nrun, burn, thin, epsilon)
 \item{epsilon}{proper fraction, used in truncation of factors}
 }
 \value{
-List containing loading matrix, variance and error in estimation
+List containing covariance matrix, error variance, error is estimating the covariance (if true covariance is supplied), number of chosen factors and posterior estimate of factors accross MCMC iterations.
 }
 \description{
 Estimates loading matrix and covariance for factor model data through Sparse Bayesian Infinite Factor Model
 }
+\details{
+abc ...
+}
 \examples{
 newdata = generateData( n = 100, p = 50, k = 10, rep = 2 )
 GibbsCov(data = newdata, nrun = 2000, burn = 500, thin = 3, epsilon = 1e-4)
+}
+\references{
+Bhattacharya et al. (2011). "Sparse Bayesian Infinite Factor Models",
+\emph{Biometrika},
+\url{https://doi.org/10.1093/biomet/asr013}
+
+Schiavon, Lorenzo, and Antonio Canale. (2020)
+"On the truncation criteria in infinite factor models." \emph{Stat}
+< https://doi.org/10.1002/sta4.298>
 }

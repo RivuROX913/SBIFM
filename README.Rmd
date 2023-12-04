@@ -43,7 +43,6 @@ data = generateData(n = 200, p = 50, k = 10, rep = 5)
 out = GibbsCov(data, 20000, 5000, 3, 1e-4)
 
 
-
 # Load the data
 data <- psych::bfi[, 1:25]
 
