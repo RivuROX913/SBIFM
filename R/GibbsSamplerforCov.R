@@ -147,12 +147,15 @@ for (g in 1:rep) {
     }
   }
 
-  # Summary measures specific to replicate
-  # 1. Covariance matrix estimation
-  errcov = Omegaout - as.vector(Ot1)
-  err1cov = Omega1out - as.vector(Ot)
-  mserep[g, ] = c(mean(errcov^2), mean(abs(errcov)), max(abs(errcov)))
-  mse1rep[g, ] = c(mean(err1cov^2), mean(abs(err1cov)), max(abs(err1cov)))
+  if(is.null(Ot))
+  {
+    # Summary measures specific to replicate
+    # 1. Covariance matrix estimation
+    errcov = Omegaout - as.vector(Ot1)
+    err1cov = Omega1out - as.vector(Ot)
+    mserep[g, ] = c(mean(errcov^2), mean(abs(errcov)), max(abs(errcov)))
+    mse1rep[g, ] = c(mean(err1cov^2), mean(abs(err1cov)), max(abs(err1cov)))
+  }
 
   # 2. Evolution of factors
   nofrep[g, ] = nof1out
@@ -160,6 +163,6 @@ for (g in 1:rep) {
   cat(paste("end replicate", g, "\n"))
   cat("--------------------\n")
 }
-  return(list( "Lambda" = Lambda, "eta" = eta, "Sigma" = 1 / ps, "MSE" = mserep,
-               "MSE1" = mse1rep, "Factor" = nofrep[,sp-1]))
+  return(list( "Cov" = Omega1, "eta" = eta, "Sigma" = 1 / ps, "MSE" = mserep,
+               "MSE1" = mse1rep, "Factor" = nofrep[,sp-1], "post.factor" = mean(nofrep)))
 }
