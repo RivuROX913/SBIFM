@@ -1,6 +1,6 @@
 Package: SBIFM
 Type: Package
-Title: What the Package Does (One Line, Title Case)
+Title: Estimates covariance matrix for datasets from laten factor models through Sparse Bayesian Infinite Factor Model
 Version: 0.0.0.9000
 Authors@R: 
   c(person("Sayantan", "Roy",

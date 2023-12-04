@@ -2,7 +2,7 @@
 % Please edit documentation in R/GibbsSamplerforCov.R
 \name{GibbsCov}
 \alias{GibbsCov}
-\title{Estimates loading matrix and covariance for factor model data}
+\title{Estimates loading matrix and covariance for factor model data through Sparse Bayesian Infinite Factor Model}
 \usage{
 GibbsCov(data, nrun, burn, thin, epsilon)
 }
@@ -21,7 +21,7 @@ GibbsCov(data, nrun, burn, thin, epsilon)
 List containing loading matrix, variance and error in estimation
 }
 \description{
-Estimates loading matrix and covariance for factor model data
+Estimates loading matrix and covariance for factor model data through Sparse Bayesian Infinite Factor Model
 }
 \examples{
 newdata = generateData( n = 100, p = 50, k = 10, rep = 2 )

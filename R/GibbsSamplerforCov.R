@@ -1,6 +1,6 @@
 ## Gibbs sampler for covariance estimation
 # using mgps prior on factor loadings
-#' Estimates loading matrix and covariance for factor model data
+#' Estimates loading matrix and covariance for factor model data through Sparse Bayesian Infinite Factor Model
 #'
 #' @import Matrix
 #' @import Rcpp
