@@ -18,7 +18,8 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of SBIFM is to ...
+The goal of SBIFM is sparse modelling of high-dimensional covariance matrices using Bayesian latent factor models. The method proposed by [Bhattachrya et. al.](https://doi.org/10.1093/biomet/asr013) has been used to develop an efficient Gibbs sampler that scales well as data dimensionality increases. For automatically truncating the infinite loading matrix through selection of the number of important factors, we use the much more efficient truncation criteria proposed by [Schiavon et. al.]( https://doi.org/10.1002/sta4.298). 
+
 
 ## Installation
 
@@ -38,6 +39,7 @@ library(SBIFM)
 ## basic example code
 
 ## Generate synthetic data
+set.seed(2143)
 data = generateData(n = 200, p = 50, k = 10, rep = 5)
 ##analysis
 out = GibbsCov(data, 20000, 5000, 3, 1e-4)

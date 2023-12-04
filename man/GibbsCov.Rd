@@ -4,7 +4,7 @@
 \alias{GibbsCov}
 \title{Estimates loading matrix and covariance for factor model data through Sparse Bayesian Infinite Factor Model}
 \usage{
-GibbsCov(data, nrun, burn, thin, epsilon)
+GibbsCov(data, nrun = 2000, burn = 500, thin = 3, epsilon = 1e-04)
 }
 \arguments{
 \item{data}{List, factor model data generated through generateData function}
@@ -24,7 +24,7 @@ List containing covariance matrix, error variance, error is estimating the covar
 Estimates loading matrix and covariance for factor model data through Sparse Bayesian Infinite Factor Model
 }
 \details{
-abc ...
+The MCMC algorithm used is taken from Bhattacharya et. al (2011) with a truncation criteria derived from Schiavon et. al. (2020).
 }
 \examples{
 newdata = generateData( n = 100, p = 50, k = 10, rep = 2 )
@@ -35,7 +35,8 @@ Bhattacharya et al. (2011). "Sparse Bayesian Infinite Factor Models",
 \emph{Biometrika},
 \url{https://doi.org/10.1093/biomet/asr013}
 
-Schiavon, Lorenzo, and Antonio Canale. (2020)
-"On the truncation criteria in infinite factor models." \emph{Stat}
-< https://doi.org/10.1002/sta4.298>
+Schiavon, Lorenzo, and Antonio Canale. (2020).
+"On the truncation criteria in infinite factor models",
+\emph{Stat},
+\url{https://doi.org/10.1002/sta4.298}
 }

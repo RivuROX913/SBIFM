@@ -23,12 +23,13 @@
 #' \emph{Biometrika},
 #' <https://doi.org/10.1093/biomet/asr013>
 #'
-#' @references Schiavon, Lorenzo, and Antonio Canale. (2020)
-#'  "On the truncation criteria in infinite factor models." \emph{Stat}
-#'  < https://doi.org/10.1002/sta4.298>
+#' @references Schiavon, Lorenzo, and Antonio Canale. (2020).
+#'  "On the truncation criteria in infinite factor models",
+#'  \emph{Stat},
+#'  <https://doi.org/10.1002/sta4.298>
 #'
 #' @details
-#' abc ...
+#' The MCMC algorithm used is taken from Bhattacharya et. al (2011) with a truncation criteria derived from Schiavon et. al. (2020).
 #'
 #'
 #' @export
@@ -38,7 +39,7 @@
 #' GibbsCov(data = newdata, nrun = 2000, burn = 500, thin = 3, epsilon = 1e-4)
 
 
-GibbsCov = function(data, nrun, burn, thin, epsilon)
+GibbsCov = function(data, nrun = 2000, burn = 500, thin = 3, epsilon = 1e-4)
 {
 
   ##consistency checks
