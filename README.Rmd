@@ -36,6 +36,14 @@ This is a basic example which shows you how to solve a common problem:
 ```{r example}
 library(SBIFM)
 ## basic example code
+
+## Generate synthetic data
+data = generateData(n = 200, p = 50, k = 10, rep = 5)
+##analysis
+out = GibbsCov(data, 20000, 5000, 3, 1e-4)
+
+
+
 # Load the data
 data <- psych::bfi[, 1:25]
 

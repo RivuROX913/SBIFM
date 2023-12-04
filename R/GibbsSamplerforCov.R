@@ -100,8 +100,7 @@ for (g in 1:rep) {
     mseout = matrix(0, nrow = sp, ncol = 3)  # Within a replicate, stores mse across MCMC iterations
     mse1out = matrix(0, nrow = sp, ncol = 3)  # MSE in the original scale
   }
-  Omegaout = rep(0, p^2)
-  Omega1out = rep(0, p^2)
+  Omegaout = Omega1out = matrix(0, p, p)
 
   # Start Gibbs sampling
   for (i in 1:nrun) {
@@ -154,8 +153,8 @@ for (g in 1:rep) {
     if (i %% thin == 0 && i > burn) {
       Omega = Lambda %*% t(Lambda) + Sigma
       Omega1 = Omega * as.numeric(sqrt(crossprod(VY)))
-      Omegaout = Omegaout + as.vector(Omega) / sp
-      Omega1out = Omega1out + as.vector(Omega1) / sp
+      Omegaout = Omegaout + Omega / sp
+      Omega1out = Omega1out + Omega1 / sp
       nof1out[(i - burn) / thin] = nofout[(i - burn) / thin]
     }
     if (i %% 1000 == 0) {
@@ -167,8 +166,8 @@ for (g in 1:rep) {
   {
     # Summary measures specific to replicate
     # 1. Covariance matrix estimation
-    errcov = Omegaout - as.vector(Ot1)
-    err1cov = Omega1out - as.vector(Ot)
+    errcov = Omegaout - Ot1
+    err1cov = Omega1out - Ot
     mserep[g, ] = c(mean(errcov^2), mean(abs(errcov)), max(abs(errcov)))
     mse1rep[g, ] = c(mean(err1cov^2), mean(abs(err1cov)), max(abs(err1cov)))
   }
@@ -184,10 +183,10 @@ for (g in 1:rep) {
 }
   if(is.null(Ot))
   {
-    return(list( "Cov" = Omega1, "eta" = eta, "Sigma" = 1 / ps,
+    return(list( "Cov" = Omega1out, "eta" = eta, "Sigma" = 1 / ps,
                  "Factor" = nofrep[,sp-1], "post.factor" = postfrep))
   } else {
-    return(list( "Cov" = Omega1, "eta" = eta, "Sigma" = 1 / ps,
+    return(list( "Cov" = Omega1out, "eta" = eta, "Sigma" = 1 / ps,
                  "MSE1" = mse1rep, "Factor" = nofrep[,sp-1], "post.factor" = postfrep))
   }
 }
