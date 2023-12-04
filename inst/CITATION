@@ -1,0 +1,11 @@
+bibentry(
+  bibtype  = "Article",
+  title    = "Sparse Bayesian infinite factor models",
+  author   = c("A. BHATTACHARYA", "D. B. DUNSON"),
+  journal  = "Biometrika",
+  year     = "2011",
+  volume   = "98",
+  number   = "2",
+  pages    = "291-306",
+  doi      = "doi: 10.1093/biomet/asr013"
+)
