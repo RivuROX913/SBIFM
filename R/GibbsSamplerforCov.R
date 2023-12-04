@@ -53,6 +53,7 @@ GibbsCov = function(data, nrun, burn, thin, epsilon)
   }
   nofrep = matrix(0, nrow = rep, ncol = sp)  # Evolution of factors across replicates
   postfrep = rep(0, rep)
+  Sigmarep = rep(0, p)
 
 for (g in 1:rep) {
   cat(paste("start replicate", g, "\n"))
@@ -156,6 +157,7 @@ for (g in 1:rep) {
       Omegaout = Omegaout + Omega / sp
       Omega1out = Omega1out + Omega1 / sp
       nof1out[(i - burn) / thin] = nofout[(i - burn) / thin]
+      Sigmarep = Sigmarep + as.numeric(sqrt(crossprod(VY))) / ps
     }
     if (i %% 1000 == 0) {
       cat(" " , i, "\n")
@@ -164,13 +166,15 @@ for (g in 1:rep) {
 
   if(is.null(Ot) == FALSE)
   {
-    # Summary measures specific to replicate
-    # 1. Covariance matrix estimation
+    # 1. Error in covariance matrix estimation
     errcov = Omegaout - Ot1
     err1cov = Omega1out - Ot
     mserep[g, ] = c(mean(errcov^2), mean(abs(errcov)), max(abs(errcov)))
     mse1rep[g, ] = c(mean(err1cov^2), mean(abs(err1cov)), max(abs(err1cov)))
   }
+
+  # 3. Covariance of errors
+  Sigma1rep = Sigmarep / sp
 
   # 2. Evolution of factors
   nofrep[g, ] = nof1out
@@ -183,10 +187,10 @@ for (g in 1:rep) {
 }
   if(is.null(Ot))
   {
-    return(list( "Cov" = Omega1out, "eta" = eta, "Sigma" = 1 / ps,
+    return(list( "Cov" = Omega1out, "Sigma" = Sigma1rep,
                  "Factor" = nofrep[,sp-1], "post.factor" = postfrep))
   } else {
-    return(list( "Cov" = Omega1out, "eta" = eta, "Sigma" = 1 / ps,
+    return(list( "Cov" = Omega1out, "Sigma" = Sigma1rep,
                  "MSE1" = mse1rep, "Factor" = nofrep[,sp-1], "post.factor" = postfrep))
   }
 }
