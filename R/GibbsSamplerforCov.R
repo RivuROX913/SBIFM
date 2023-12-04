@@ -14,14 +14,14 @@
 #' @param nrun Numeric, number of iterations to run the algorithm
 #' @param burn Numeric, number of iterations to ignore
 #' @param thin Numeric, thinning parameter for the outcome
-#' @param epsilon proper fraction, usd in truncation of factors
+#' @param epsilon proper fraction, used in truncation of factors
 #'
 #' @return List containing loading matrix, variance and error in estimation
 #'
 #' @export
 #'
 #' @examples
-#' newdata = generateData( n = 100, p = 50, k = 10, rep = 1 )
+#' newdata = generateData( n = 100, p = 50, k = 10, rep = 2 )
 #' GibbsCov(data = newdata, nrun = 2000, burn = 500, thin = 3, epsilon = 1e-4)
 
 
@@ -30,7 +30,7 @@ GibbsCov = function(data, nrun, burn, thin, epsilon)
   ##definitions
   dat = data$data
   Ot = data$Var
-  rep = data$repitition
+  rep = data$replicate
   n = data$n
   p = data$p
   sp = (nrun - burn) / thin  # Number of posterior samples

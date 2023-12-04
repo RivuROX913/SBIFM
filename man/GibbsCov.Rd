@@ -15,7 +15,7 @@ GibbsCov(data, nrun, burn, thin, epsilon)
 
 \item{thin}{Numeric, thinning parameter for the outcome}
 
-\item{epsilon}{proper fraction, usd in truncation of factors}
+\item{epsilon}{proper fraction, used in truncation of factors}
 }
 \value{
 List containing loading matrix, variance and error in estimation
@@ -24,6 +24,6 @@ List containing loading matrix, variance and error in estimation
 Estimates loading matrix and covariance for factor model data
 }
 \examples{
-newdata = generateData( n = 100, p = 50, k = 10, rep = 1 )
+newdata = generateData( n = 100, p = 50, k = 10, rep = 2 )
 GibbsCov(data = newdata, nrun = 2000, burn = 500, thin = 3, epsilon = 1e-4)
 }

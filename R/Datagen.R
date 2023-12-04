@@ -39,7 +39,7 @@ generateData = function( n, p, k, rep ){
   rktr = qr(Lambda)$rank
   Lamtr = Lambda
   #return data as output
-  return(list("data" = dat, "Var" = Ot, "repilicate
+  return(list("data" = dat, "Var" = Ot, "replicate
               " = rep, "n" = n, "p" =p,
               "k.train" = ktr, "rank.train" = rktr, "Lambda.train" = Lamtr))
 }
