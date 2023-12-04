@@ -36,6 +36,26 @@ This is a basic example which shows you how to solve a common problem:
 ```{r example}
 library(SBIFM)
 ## basic example code
+# Load the data
+data <- psych::bfi[, 1:25]
+
+head(data)
+#diagnose for missing value
+dlookr::diagnose(data)
+visdat::vis_miss(data, sort_miss = FALSE)
+#imputation
+mice_model <- mice::mice(data, method='pmm', seed = 123)
+data_complete <- mice::complete(mice_model)
+
+visdat::vis_miss(data_complete, sort_miss = FALSE)
+
+
+##analysis
+datalist = list( "data" = data_complete, "replicate" = 1, "n" = nrow(data_complete), "p" = ncol(data_complete) )
+
+out = GibbsCov(datalist, 20000, 5000, 3, 1e-4)
+
+
 ```
 
 What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:

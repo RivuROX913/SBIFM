@@ -27,6 +27,15 @@
 
 GibbsCov = function(data, nrun, burn, thin, epsilon)
 {
+
+  ##consistency checks
+  stopifnot("nrun must be positive" = nrun > 0)
+  stopifnot("burn must be positive" = burn > 0)
+  stopifnot("nrun must be greater than burn" = nrun > burn)
+  stopifnot("thin must be positive" = thin > 0)
+  stopifnot("thin must be smaller than nrun - burn" = thin < nrun - burn)
+  stopifnot("epsilon must be a proper proportion" = epsilon > 0 & epsilon < 1)
+
   ##definitions
   dat = data$data
   Ot = data$Var
@@ -36,10 +45,14 @@ GibbsCov = function(data, nrun, burn, thin, epsilon)
   sp = (nrun - burn) / thin  # Number of posterior samples
 
 
-# Initialize arrays for storing results
-mserep = matrix(0, nrow = rep, ncol = 3)  # MSE, absolute bias (avg and max) in estimating cov matrix
-mse1rep = matrix(0, nrow = rep, ncol = 3)  # Same as above in the original scale in estimating cov matrix
-nofrep = matrix(0, nrow = rep, ncol = sp)  # Evolution of factors across replicates
+  # Initialize arrays for storing results
+  if(is.null(Ot) == FALSE)
+  {
+    mserep = matrix(0, nrow = rep, ncol = 3)  # MSE, absolute bias (avg and max) in estimating cov matrix
+    mse1rep = matrix(0, nrow = rep, ncol = 3)  # Same as above in the original scale in estimating cov matrix
+  }
+  nofrep = matrix(0, nrow = rep, ncol = sp)  # Evolution of factors across replicates
+  postfrep = rep(0, rep)
 
 for (g in 1:rep) {
   cat(paste("start replicate", g, "\n"))
@@ -82,8 +95,11 @@ for (g in 1:rep) {
   nofout = numeric(nrun + 1)  # Number of factors across iterations
   nofout[1] = k
   nof1out = numeric(sp)
-  mseout = matrix(0, nrow = sp, ncol = 3)  # Within a replicate, stores mse across MCMC iterations
-  mse1out = matrix(0, nrow = sp, ncol = 3)  # MSE in the original scale
+  if(is.null(Ot) == FALSE)
+  {
+    mseout = matrix(0, nrow = sp, ncol = 3)  # Within a replicate, stores mse across MCMC iterations
+    mse1out = matrix(0, nrow = sp, ncol = 3)  # MSE in the original scale
+  }
   Omegaout = rep(0, p^2)
   Omega1out = rep(0, p^2)
 
@@ -147,7 +163,7 @@ for (g in 1:rep) {
     }
   }
 
-  if(is.null(Ot))
+  if(is.null(Ot) == FALSE)
   {
     # Summary measures specific to replicate
     # 1. Covariance matrix estimation
@@ -160,9 +176,18 @@ for (g in 1:rep) {
   # 2. Evolution of factors
   nofrep[g, ] = nof1out
 
+  # 3. posterior estimate of factors
+  postfrep[g] = mean(nof1out)
+
   cat(paste("end replicate", g, "\n"))
   cat("--------------------\n")
 }
-  return(list( "Cov" = Omega1, "eta" = eta, "Sigma" = 1 / ps, "MSE" = mserep,
-               "MSE1" = mse1rep, "Factor" = nofrep[,sp-1], "post.factor" = mean(nofrep)))
+  if(is.null(Ot))
+  {
+    return(list( "Cov" = Omega1, "eta" = eta, "Sigma" = 1 / ps,
+                 "Factor" = nofrep[,sp-1], "post.factor" = postfrep))
+  } else {
+    return(list( "Cov" = Omega1, "eta" = eta, "Sigma" = 1 / ps,
+                 "MSE1" = mse1rep, "Factor" = nofrep[,sp-1], "post.factor" = postfrep))
+  }
 }
