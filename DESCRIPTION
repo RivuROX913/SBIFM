@@ -1,14 +1,22 @@
 Package: SBIFM
 Type: Package
 Title: Sparse Bayesian Infinite Factor Model
-Version: 0.0.0.9000
+Version: 0.0.1.0
 Authors@R: 
   c(person("Sayantan", "Roy",
   email = "rivurox@tamu.edu",
   role = c("aut", "cre")),
   person("Anirban", "Bhattacharya",
   email = "anirbanb@stat.tamu.edu",role = "aut"))
-Description: What the package does (one paragraph).
+Description: The goal of SBIFM is sparse modelling of high-dimensional covariance
+matrices using Bayesian latent factor models. The method proposed by
+[Bhattachrya et. al.](https://doi.org/10.1093/biomet/asr013) has been
+used to develop an efficient Gibbs sampler that scales well as data
+dimensionality increases. For automatically truncating the infinite
+loading matrix through selection of the number of important factors, we
+use the much more efficient truncation criteria proposed by [Schiavon
+et. al.](https://doi.org/10.1002/sta4.298).
+
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
