@@ -64,6 +64,7 @@ GibbsCov = function(data, nrun = 2000, burn = 500, thin = 3, epsilon = 1e-4)
   {
     mserep = matrix(0, nrow = rep, ncol = 3)  # MSE, absolute bias (avg and max) in estimating cov matrix
     mse1rep = matrix(0, nrow = rep, ncol = 3)  # Same as above in the original scale in estimating cov matrix
+    colnames(mse1rep) = c("mean.sq", "mean.abs", "max.abs")
   }
   nofrep = matrix(0, nrow = rep, ncol = sp)  # Evolution of factors across replicates
   postfrep = rep(0, sp)

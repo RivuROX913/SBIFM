@@ -93,3 +93,6 @@ Applying `GibbsCov()` on above imputed dataset shows that the 25 personality tra
 out = GibbsCov(datalist, 20000, 5000, 3, 1e-4)
 out$Factor
 ```
+
+##References
+

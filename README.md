@@ -202,7 +202,7 @@ matrix is included in the data, it also returns the error in estimation:
 ``` r
 ## Error in covariance estimation
 out$MSE
-#>          [,1]     [,2]     [,3]
+#>       mean.sq mean.abs  max.abs
 #> [1,] 77.97521 3.325681 56.77403
 #> [2,] 82.31437 3.348891 57.78944
 #> [3,] 94.92937 3.540395 62.71355
@@ -356,3 +356,5 @@ out = GibbsCov(datalist, 20000, 5000, 3, 1e-4)
 out$Factor
 #> [1] 6
 ```
+
+\##References
