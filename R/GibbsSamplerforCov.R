@@ -202,9 +202,9 @@ for (g in 1:rep) {
   if(is.null(Ot))
   {
     return(list( "Cov" = Omega1out, "Sigma" = Sigma1rep,
-                 "Factor" = nofrep[,sp-1], "post.factor" = postfrep))
+                 "Factor" = nofrep[,sp-1], "post.factor" = postfrep[-sp]))
   } else {
     return(list( "Cov" = Omega1out, "Sigma" = Sigma1rep,
-                 "MSE" = mse1rep, "Factor" = nofrep[,sp-1], "post.factor" = postfrep))
+                 "MSE" = mse1rep, "Factor" = nofrep[,sp-1], "post.factor" = postfrep[-sp]))
   }
 }

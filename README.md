@@ -116,9 +116,9 @@ tail(data)
 #> [1] 10
 ```
 
-The function generates a sparse loading matrix with given parameters and
-returns factor model data with that loading matrix along with other true
-parameters.
+The function `generateDat()` generates a sparse loading matrix with
+given parameters and returns factor model data with that loading matrix
+along with other true parameters.
 
 ``` r
 ## Analysis
@@ -195,9 +195,9 @@ out = GibbsCov(data, 10000, 3000, 7, 1e-4)
 #> --------------------
 ```
 
-The function runs the MCMC algorithm to estimate the covariance matrix
-and number of factors needed. If the true Covariance matrix is included
-in the data, it also returns the error in estimation:
+The function `GibsCov()` runs the MCMC algorithm to estimate the
+covariance matrix and number of factors needed. If the true Covariance
+matrix is included in the data, it also returns the error in estimation:
 
 ``` r
 ## Error in covariance estimation
@@ -219,10 +219,21 @@ Above plot shows the average factors in the model across iterations for
 multiple replications of the data. As we can see, the convergence rate
 of the factors is almost linear.
 
+The function `imputeData()` was made to help users in handling real
+datasets. To show a brief example we consider the `bfi` dataset included
+in the `psych` package that contains 25 personality items taken from the
+International Item Pool. For more details regarding the data, [see
+this](https://pmagunia.com/dataset/r-dataset-package-psych-bfi).
+
+`imputeData()` function can make a list suitable as an input to the
+function `GibbsCov()`. It can also impute any missing data if necessary.
+Following results show the amount of missing data before and after
+applying the function:
+
 ``` r
 # Real data and visualisation
 library(psych)
-library(dlookr)
+library(dlookr, quietly = TRUE)
 #> Registered S3 method overwritten by 'dlookr':
 #>   method         from  
 #>   plot.transform scales
@@ -238,7 +249,6 @@ library(visdat)
 
 ## Dataset
 data = bfi[, 1:25]
-
 head(data)
 #>       A1 A2 A3 A4 A5 C1 C2 C3 C4 C5 E1 E2 E3 E4 E5 N1 N2 N3 N4 N5 O1 O2 O3 O4
 #> 61617  2  4  3  4  4  2  3  3  4  4  3  3  3  4  4  3  4  2  2  3  3  6  3  4
@@ -254,6 +264,7 @@ head(data)
 #> 61621  5
 #> 61622  3
 #> 61623  1
+
 #diagnose for missing value
 diagnose(data)
 #> # A tibble: 25 × 6
@@ -273,9 +284,10 @@ diagnose(data)
 vis_miss(data, sort_miss = FALSE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
+<img src="man/figures/README-real data-1.png" width="100%" />
 
 ``` r
+
 #imputation
 datalist = imputeData(data)
 #> 
@@ -306,6 +318,16 @@ datalist = imputeData(data)
 #>   5   4  A1  A2  A3  A4  A5  C1  C2  C3  C4  C5  E1  E2  E3  E4  E5  N1  N2  N3  N4  N5  O1  O3  O4  O5
 #>   5   5  A1  A2  A3  A4  A5  C1  C2  C3  C4  C5  E1  E2  E3  E4  E5  N1  N2  N3  N4  N5  O1  O3  O4  O5
 
+##completed data
+vis_miss(datalist$data, sort_miss = FALSE)
+```
+
+<img src="man/figures/README-real data-2.png" width="100%" />
+
+Applying `GibbsCov()` on above imputed dataset shows that the 25
+personality traits actually depends on only 6 factors:
+
+``` r
 out = GibbsCov(datalist, 20000, 5000, 3, 1e-4)
 #> start replicate 1 
 #> --------------------
@@ -331,28 +353,6 @@ out = GibbsCov(datalist, 20000, 5000, 3, 1e-4)
 #>   20000 
 #> end replicate 1 
 #> --------------------
+out$Factor
+#> [1] 6
 ```
-
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
-
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
-```
-
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
