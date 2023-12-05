@@ -21,6 +21,8 @@ LinkingTo:
 Imports: 
     MASS,
     Matrix,
+    psych,
+    mice,
     Rcpp,
     RcppArmadillo
 Collate: 

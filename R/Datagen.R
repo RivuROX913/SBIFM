@@ -49,6 +49,8 @@ generateData = function( n, p, k, rep ){
 #' @param data data table
 #'
 #' @import mice
+#' @import psych
+#'
 #' @return list, containing supplied dataset and other true parameters
 #' @export
 #'
