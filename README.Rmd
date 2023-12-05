@@ -34,18 +34,35 @@ devtools::install_github("RivuROX913/SBIFM")
 
 This is a basic example which shows applications of different functions:
 
-```{r example}
+```{r example generation}
 library(SBIFM)
 
 ## Generate synthetic data
 set.seed(2143)
 data = generateData(n = 200, p = 30, k = 10, rep = 5)
 tail(data)
+```
 
-##analysis
+The function \texttt{generateData} generates a sparse loading matrix with given parameters and returns factor model data with that loading matrix along with other true parameters.
+
+```{r example analysis}
+## Analysis
 out = GibbsCov(data, 10000, 3000, 7, 1e-4)
-plot(out$post.factor[1:(data$p+10)])
+```
 
+The function \texttt{GibsCov} runs the MCMC algorithm to estimate the covariance matrix and number of factors needed. If the true Covariance matrix is included in the data, it also returns the error in estimation:
+
+```{r error and convergence}
+## Error in covariance estimation
+out$MSE
+
+## Convergence rate
+plot(out$post.factor[1:(data$p+10)], type = "l", xlab = "Iteration", ylab = "Number of factors", main = "Evolution of factors")
+```
+
+Above plot shows the average factors in the model across iterations for multiple replications of the data. As we can see, the convergence rate of the factors is almost linear.
+
+```{r}
 # Load the data
 data <- psych::bfi[, 1:25]
 

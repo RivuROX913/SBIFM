@@ -114,8 +114,14 @@ tail(data)
 #> 
 #> $rank.train
 #> [1] 10
+```
 
-##analysis
+The function generates a sparse loading matrix with given parameters and
+returns factor model data with that loading matrix along with other true
+parameters.
+
+``` r
+## Analysis
 out = GibbsCov(data, 10000, 3000, 7, 1e-4)
 #> start replicate 1 
 #> --------------------
@@ -187,13 +193,33 @@ out = GibbsCov(data, 10000, 3000, 7, 1e-4)
 #>   10000 
 #> end replicate 5 
 #> --------------------
-plot(out$post.factor[1:(data$p+10)])
 ```
 
-<img src="man/figures/README-example-1.png" width="100%" />
+The function runs the MCMC algorithm to estimate the covariance matrix
+and number of factors needed. If the true Covariance matrix is included
+in the data, it also returns the error in estimation:
 
 ``` r
+## Error in covariance estimation
+out$MSE
+#>          [,1]     [,2]     [,3]
+#> [1,] 77.97521 3.325681 56.77403
+#> [2,] 82.31437 3.348891 57.78944
+#> [3,] 94.92937 3.540395 62.71355
+#> [4,] 79.53688 3.349572 57.61390
+#> [5,] 88.63750 3.464929 60.44856
 
+## Convergence rate
+plot(out$post.factor[1:(data$p+10)], type = "l", xlab = "Iteration", ylab = "Number of factors", main = "Evolution of factors")
+```
+
+<img src="man/figures/README-error and convergence-1.png" width="100%" />
+
+Above plot shows the average factors in the model across iterations for
+multiple replications of the data. As we can see, the convergence rate
+of the factors is almost linear.
+
+``` r
 # Load the data
 data <- psych::bfi[, 1:25]
 
@@ -234,7 +260,7 @@ dlookr::diagnose(data)
 visdat::vis_miss(data, sort_miss = FALSE)
 ```
 
-<img src="man/figures/README-example-2.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
 
 ``` r
 #imputation
@@ -271,7 +297,7 @@ data_complete <- mice::complete(mice_model)
 visdat::vis_miss(data_complete, sort_miss = FALSE)
 ```
 
-<img src="man/figures/README-example-3.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-2-2.png" width="100%" />
 
 ``` r
 
