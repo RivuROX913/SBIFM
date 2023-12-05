@@ -42,3 +42,28 @@ generateData = function( n, p, k, rep ){
   return(list("data" = dat, "Var" = Ot, "Lambda.train" = Lamtr, "replicate" = rep, "n" = n, "p" =p,
               "k.train" = ktr, "rank.train" = rktr))
 }
+
+
+#' Makes a list from a data table suiatble as an input to GibbsCov. (Imputes the data if necessary)
+#'
+#' @param data data table
+#'
+#' @import mice
+#' @return list, containing supplied dataset and other true parameters
+#' @export
+#'
+#' @examples
+#' library(psych)
+#' data = bfi[, 1:25]
+#' imputeData(data)
+
+imputeData = function(data) {
+
+  #imputation
+  mice_model = mice(data, method='pmm', seed = 123)
+  data_complete = complete(mice_model)
+
+  ##imputed data as a list
+  return( list( "data" = data_complete, "replicate" = 1, "n" = nrow(data_complete), "p" = ncol(data_complete) ))
+
+}

@@ -220,8 +220,24 @@ multiple replications of the data. As we can see, the convergence rate
 of the factors is almost linear.
 
 ``` r
-# Load the data
-data <- psych::bfi[, 1:25]
+# Real data and visualisation
+library(psych)
+library(dlookr)
+#> Registered S3 method overwritten by 'dlookr':
+#>   method         from  
+#>   plot.transform scales
+#> 
+#> Attaching package: 'dlookr'
+#> The following object is masked from 'package:psych':
+#> 
+#>     describe
+#> The following object is masked from 'package:base':
+#> 
+#>     transform
+library(visdat)
+
+## Dataset
+data = bfi[, 1:25]
 
 head(data)
 #>       A1 A2 A3 A4 A5 C1 C2 C3 C4 C5 E1 E2 E3 E4 E5 N1 N2 N3 N4 N5 O1 O2 O3 O4
@@ -239,10 +255,7 @@ head(data)
 #> 61622  3
 #> 61623  1
 #diagnose for missing value
-dlookr::diagnose(data)
-#> Registered S3 method overwritten by 'dlookr':
-#>   method         from  
-#>   plot.transform scales
+diagnose(data)
 #> # A tibble: 25 × 6
 #>    variables types   missing_count missing_percent unique_count unique_rate
 #>    <chr>     <chr>           <int>           <dbl>        <int>       <dbl>
@@ -257,14 +270,14 @@ dlookr::diagnose(data)
 #>  9 C4        integer            26           0.929            7      0.0025
 #> 10 C5        integer            16           0.571            7      0.0025
 #> # ℹ 15 more rows
-visdat::vis_miss(data, sort_miss = FALSE)
+vis_miss(data, sort_miss = FALSE)
 ```
 
 <img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
 
 ``` r
 #imputation
-mice_model <- mice::mice(data, method='pmm', seed = 123)
+datalist = imputeData(data)
 #> 
 #>  iter imp variable
 #>   1   1  A1  A2  A3  A4  A5  C1  C2  C3  C4  C5  E1  E2  E3  E4  E5  N1  N2  N3  N4  N5  O1  O3  O4  O5
@@ -292,18 +305,6 @@ mice_model <- mice::mice(data, method='pmm', seed = 123)
 #>   5   3  A1  A2  A3  A4  A5  C1  C2  C3  C4  C5  E1  E2  E3  E4  E5  N1  N2  N3  N4  N5  O1  O3  O4  O5
 #>   5   4  A1  A2  A3  A4  A5  C1  C2  C3  C4  C5  E1  E2  E3  E4  E5  N1  N2  N3  N4  N5  O1  O3  O4  O5
 #>   5   5  A1  A2  A3  A4  A5  C1  C2  C3  C4  C5  E1  E2  E3  E4  E5  N1  N2  N3  N4  N5  O1  O3  O4  O5
-data_complete <- mice::complete(mice_model)
-
-visdat::vis_miss(data_complete, sort_miss = FALSE)
-```
-
-<img src="man/figures/README-unnamed-chunk-2-2.png" width="100%" />
-
-``` r
-
-
-##analysis
-datalist = list( "data" = data_complete, "replicate" = 1, "n" = nrow(data_complete), "p" = ncol(data_complete) )
 
 out = GibbsCov(datalist, 20000, 5000, 3, 1e-4)
 #> start replicate 1 

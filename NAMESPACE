@@ -2,10 +2,12 @@
 
 export(GibbsCov)
 export(generateData)
+export(imputeData)
 import(MASS)
 import(Matrix)
 import(Rcpp)
 import(RcppArmadillo)
+import(mice)
 importFrom(Rcpp,sourceCpp)
 importFrom(stats,rgamma)
 importFrom(stats,rnorm)
