@@ -52,7 +52,7 @@ out = GibbsCov(data, 10000, 3000, 7, 1e-4)
 
 The function `GibsCov()` runs the MCMC algorithm to estimate the covariance matrix and number of factors needed. If the true Covariance matrix is included in the data, it also returns the error in estimation:
 
-```{r error and convergence}
+```{r convergence}
 ## Error in covariance estimation
 out$MSE
 
@@ -66,7 +66,7 @@ The function `imputeData()` was made to help users in handling real datasets. To
 
 `imputeData()` function can make a list suitable as an input to the function `GibbsCov()`. It can also impute any missing data if necessary. Following results show the amount of missing data before and after applying the function:
 
-```{r real data}
+```{r real}
 # Real data and visualisation
 library(psych)
 library(dlookr, quietly = TRUE)

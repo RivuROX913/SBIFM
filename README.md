@@ -213,7 +213,7 @@ out$MSE
 plot(out$post.factor[1:(data$p+10)], type = "l", xlab = "Iteration", ylab = "Number of factors", main = "Evolution of factors")
 ```
 
-<img src="man/figures/README-error and convergence-1.png" width="100%" />
+<img src="man/figures/README-convergence-1.png" width="100%" />
 
 Above plot shows the average factors in the model across iterations for
 multiple replications of the data. As we can see, the convergence rate
@@ -284,7 +284,7 @@ diagnose(data)
 vis_miss(data, sort_miss = FALSE)
 ```
 
-<img src="man/figures/README-real data-1.png" width="100%" />
+<img src="man/figures/README-real-1.png" width="100%" />
 
 ``` r
 
@@ -322,7 +322,7 @@ datalist = imputeData(data)
 vis_miss(datalist$data, sort_miss = FALSE)
 ```
 
-<img src="man/figures/README-real data-2.png" width="100%" />
+<img src="man/figures/README-real-2.png" width="100%" />
 
 Applying `GibbsCov()` on above imputed dataset shows that the 25
 personality traits actually depends on only 6 factors:
