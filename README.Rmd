@@ -32,18 +32,19 @@ devtools::install_github("RivuROX913/SBIFM")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example which shows applications of different functions:
 
 ```{r example}
 library(SBIFM)
-## basic example code
 
 ## Generate synthetic data
 set.seed(2143)
-data = generateData(n = 200, p = 50, k = 10, rep = 5)
-##analysis
-out = GibbsCov(data, 20000, 5000, 3, 1e-4)
+data = generateData(n = 200, p = 30, k = 10, rep = 5)
+tail(data)
 
+##analysis
+out = GibbsCov(data, 10000, 3000, 7, 1e-4)
+plot(out$post.factor[1:(data$p+10)])
 
 # Load the data
 data <- psych::bfi[, 1:25]
