@@ -116,7 +116,7 @@ tail(data)
 #> [1] 10
 ```
 
-The function `generateDat()` generates a sparse loading matrix with
+The function `generateData()` generates a sparse loading matrix with
 given parameters and returns factor model data with that loading matrix
 along with other true parameters.
 
@@ -201,7 +201,7 @@ matrix is included in the data, it also returns the error in estimation:
 
 ``` r
 ## Error in covariance estimation
-out$MSE
+out$Error
 #>       mean.sq mean.abs  max.abs
 #> [1,] 77.97521 3.325681 56.77403
 #> [2,] 82.31437 3.348891 57.78944
@@ -219,15 +219,17 @@ Above plot shows the average factors in the model across iterations for
 multiple replications of the data. As we can see, the convergence rate
 of the factors is almost linear.
 
+# Real data
+
 The function `imputeData()` was made to help users in handling real
 datasets. To show a brief example we consider the `bfi` dataset included
 in the `psych` package that contains 25 personality items taken from the
-International Item Pool. For more details regarding the data, [see
-this](https://pmagunia.com/dataset/r-dataset-package-psych-bfi).
+International Item Pool. For more details regarding the data, [click
+here](https://pmagunia.com/dataset/r-dataset-package-psych-bfi).
 
 `imputeData()` function can make a list suitable as an input to the
 function `GibbsCov()`. It can also impute any missing data if necessary.
-Following results show the amount of missing data before and after
+Following plots visualize the amount of missing data before and after
 applying the function:
 
 ``` r
@@ -325,7 +327,7 @@ vis_miss(datalist$data, sort_miss = FALSE)
 <img src="man/figures/README-real-2.png" width="100%" />
 
 Applying `GibbsCov()` on above imputed dataset shows that the 25
-personality traits actually depends on only 6 factors:
+personality traits actually depends on only 5 factors:
 
 ``` r
 out = GibbsCov(datalist, 20000, 5000, 3, 1e-4)
@@ -357,4 +359,16 @@ out$Factor
 #> [1] 6
 ```
 
-\##References
+We can also find one of the estimates of the loading matrix, even though
+it is not identifiable.
+
+``` r
+head(out$Lambda)
+#>             [,1]         [,2]         [,3]        [,4]        [,5]
+#> [1,] -0.09068760 -0.001446571 -0.036389755  0.17838213 -0.03626155
+#> [2,]  0.21034713 -0.052546422 -0.020266899 -0.17604470 -0.02391111
+#> [3,]  0.24679450 -0.025731604 -0.009565672 -0.14084433 -0.01937628
+#> [4,]  0.15957797 -0.088943819  0.006476155 -0.11371825 -0.06843995
+#> [5,]  0.24914044 -0.001041185  0.043664167 -0.10859960 -0.02146926
+#> [6,]  0.02430332 -0.239000521 -0.037648136  0.02439744  0.04482366
+```
