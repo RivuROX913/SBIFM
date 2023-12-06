@@ -43,7 +43,7 @@ data = generateData(n = 200, p = 30, k = 10, rep = 5)
 tail(data)
 ```
 
-The function `generateDat()` generates a sparse loading matrix with given parameters and returns factor model data with that loading matrix along with other true parameters.
+The function `generateData()` generates a sparse loading matrix with given parameters and returns factor model data with that loading matrix along with other true parameters.
 
 ```{r example analysis}
 ## Analysis
@@ -54,7 +54,7 @@ The function `GibsCov()` runs the MCMC algorithm to estimate the covariance matr
 
 ```{r convergence}
 ## Error in covariance estimation
-out$MSE
+out$Error
 
 ## Convergence rate
 plot(out$post.factor[1:(data$p+10)], type = "l", xlab = "Iteration", ylab = "Number of factors", main = "Evolution of factors")
@@ -62,9 +62,11 @@ plot(out$post.factor[1:(data$p+10)], type = "l", xlab = "Iteration", ylab = "Num
 
 Above plot shows the average factors in the model across iterations for multiple replications of the data. As we can see, the convergence rate of the factors is almost linear.
 
-The function `imputeData()` was made to help users in handling real datasets. To show a brief example we consider the `bfi` dataset included in the `psych` package that contains 25 personality items taken from the International Item Pool. For more details regarding the data, [see this](https://pmagunia.com/dataset/r-dataset-package-psych-bfi).
+# Real data
 
-`imputeData()` function can make a list suitable as an input to the function `GibbsCov()`. It can also impute any missing data if necessary. Following results show the amount of missing data before and after applying the function:
+The function `imputeData()` was made to help users in handling real datasets. To show a brief example we consider the `bfi` dataset included in the `psych` package that contains 25 personality items taken from the International Item Pool. For more details regarding the data, [click here](https://pmagunia.com/dataset/r-dataset-package-psych-bfi).
+
+`imputeData()` function can make a list suitable as an input to the function `GibbsCov()`. It can also impute any missing data if necessary. Following plots visualize the amount of missing data before and after applying the function:
 
 ```{r real}
 # Real data and visualisation
@@ -94,5 +96,9 @@ out = GibbsCov(datalist, 20000, 5000, 3, 1e-4)
 out$Factor
 ```
 
-##References
+We can also find one of the estimates of the loading matrix, even though it is not identifiable.
+
+```{r}
+head(out$Lambda)
+```
 

@@ -16,7 +16,7 @@
 #' @param thin Numeric, thinning parameter for the outcome
 #' @param epsilon proper fraction, used in truncation of factors
 #'
-#' @return List containing covariance matrix, error variance, error is estimating the covariance (if true covariance is supplied), number of chosen factors and posterior estimate of factors accross MCMC iterations.
+#' @return List containing an estiate of the loading matrix, covariance matrix, error variance, error in estimating the covariance (if true covariance is supplied), number of chosen factors and posterior estimate of factors accross MCMC iterations.
 #'
 #' @references
 #' Bhattacharya et al. (2011). "Sparse Bayesian Infinite Factor Models",
@@ -202,10 +202,10 @@ for (g in 1:rep) {
 }
   if(is.null(Ot))
   {
-    return(list( "Cov" = Omega1out, "Sigma" = Sigma1rep,
+    return(list( "Lambda" = Lambda, "Eta" = eta, "Cov" = Omega1out, "Sigma" = Sigma1rep,
                  "Factor" = nofrep[,sp-1], "post.factor" = postfrep[-sp]))
   } else {
-    return(list( "Cov" = Omega1out, "Sigma" = Sigma1rep,
-                 "MSE" = mse1rep, "Factor" = nofrep[,sp-1], "post.factor" = postfrep[-sp]))
+    return(list( "Lambda" = Lambda, "Eta" = eta, "Cov" = Omega1out, "Sigma" = Sigma1rep,
+                 "Error" = mse1rep, "Factor" = nofrep[,sp-1], "post.factor" = postfrep[-sp]))
   }
 }
