@@ -66,7 +66,7 @@ GibbsCov = function(data, nrun = 2000, burn = 500, thin = 3, epsilon = 1e-4)
     mse1rep = matrix(0, nrow = rep, ncol = 3)  # Same as above in the original scale in estimating cov matrix
     colnames(mse1rep) = c("mean.sq", "mean.abs", "max.abs")
   }
-  nofrep = matrix(0, nrow = rep, ncol = sp)  # Evolution of factors across replicates
+  nofrep = matrix(0, nrow = rep, ncol = (nrun+1))  # Evolution of factors across replicates
   postfrep = rep(0, sp)
   Sigmarep = rep(0, p)
 
@@ -171,7 +171,6 @@ for (g in 1:rep) {
       Omega1 = Omega * as.numeric(sqrt(crossprod(VY)))
       Omegaout = Omegaout + Omega / sp
       Omega1out = Omega1out + Omega1 / sp
-      nof1out[(i - burn) / thin] = nofout[(i - burn) / thin]
       Sigmarep = Sigmarep + as.numeric(sqrt(crossprod(VY))) * Sigma
     }
     if (i %% 1000 == 0) {
@@ -192,7 +191,7 @@ for (g in 1:rep) {
   Sigma1rep = Sigmarep / sp
 
   # 2. Evolution of factors
-  nofrep[g, ] = nof1out
+  nofrep[g, ] = nofout
 
   # 3. posterior estimate of factors
   postfrep = colMeans(nofrep)
@@ -203,9 +202,9 @@ for (g in 1:rep) {
   if(is.null(Ot))
   {
     return(list( "Lambda" = Lambda, "Eta" = eta, "Cov" = Omega1out, "Sigma" = Sigma1rep,
-                 "Factor" = nofrep[,(sp-1)], "post.factor" = postfrep[-sp]))
+                 "Factor" = nofrep[,(nrun+1)], "post.factor" = postfrep))
   } else {
     return(list( "Lambda" = Lambda, "Eta" = eta, "Cov" = Omega1out, "Sigma" = Sigma1rep,
-                 "Error" = mse1rep, "Factor" = nofrep[,(sp-1)], "post.factor" = postfrep[-sp]))
+                 "Error" = mse1rep, "Factor" = nofrep[,(nrun+1)], "post.factor" = postfrep))
   }
 }

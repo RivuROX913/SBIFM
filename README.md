@@ -360,7 +360,7 @@ out$Factor
 ```
 
 We can also find one of the estimates of the loading matrix, even though
-it is not identifiable.
+it is not identifiable na dhence not unique.
 
 ``` r
 head(out$Lambda)

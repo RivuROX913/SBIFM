@@ -96,9 +96,8 @@ out = GibbsCov(datalist, 20000, 5000, 3, 1e-4)
 out$Factor
 ```
 
-We can also find one of the estimates of the loading matrix, even though it is not identifiable.
+We can also find one of the estimates of the loading matrix, even though it is not identifiable na dhence not unique.
 
 ```{r, comment = NA}
 head(out$Lambda)
 ```
-
