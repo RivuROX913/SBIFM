@@ -34,7 +34,7 @@ devtools::install_github("RivuROX913/SBIFM")
 
 This is a basic example which shows applications of different functions:
 
-```{r example generation}
+```{r example generation, comment = NA}
 library(SBIFM)
 
 ## Generate synthetic data
@@ -45,14 +45,14 @@ tail(data)
 
 The function `generateData()` generates a sparse loading matrix with given parameters and returns factor model data with that loading matrix along with other true parameters.
 
-```{r example analysis}
+```{r example analysis, comment = NA}
 ## Analysis
 out = GibbsCov(data, 10000, 3000, 7, 1e-4)
 ```
 
 The function `GibsCov()` runs the MCMC algorithm to estimate the covariance matrix and number of factors needed. If the true Covariance matrix is included in the data, it also returns the error in estimation:
 
-```{r convergence}
+```{r convergence, comment = NA}
 ## Error in covariance estimation
 out$Error
 
@@ -68,7 +68,7 @@ The function `imputeData()` was made to help users in handling real datasets. To
 
 `imputeData()` function can make a list suitable as an input to the function `GibbsCov()`. It can also impute any missing data if necessary. Following plots visualize the amount of missing data before and after applying the function:
 
-```{r real}
+```{r real, comment = NA}
 # Real data and visualisation
 library(psych)
 library(dlookr, quietly = TRUE)
@@ -91,14 +91,14 @@ vis_miss(datalist$data, sort_miss = FALSE)
 
 Applying `GibbsCov()` on above imputed dataset shows that the 25 personality traits actually depends on only 5 factors:
 
-```{r Real data analysis}
+```{r Real data analysis, comment = NA}
 out = GibbsCov(datalist, 20000, 5000, 3, 1e-4)
 out$Factor
 ```
 
 We can also find one of the estimates of the loading matrix, even though it is not identifiable.
 
-```{r}
+```{r, comment = NA}
 head(out$Lambda)
 ```
 

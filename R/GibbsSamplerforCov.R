@@ -203,9 +203,9 @@ for (g in 1:rep) {
   if(is.null(Ot))
   {
     return(list( "Lambda" = Lambda, "Eta" = eta, "Cov" = Omega1out, "Sigma" = Sigma1rep,
-                 "Factor" = nofrep[,sp-1], "post.factor" = postfrep[-sp]))
+                 "Factor" = nofrep[,(sp-1)], "post.factor" = postfrep[-sp]))
   } else {
     return(list( "Lambda" = Lambda, "Eta" = eta, "Cov" = Omega1out, "Sigma" = Sigma1rep,
-                 "Error" = mse1rep, "Factor" = nofrep[,sp-1], "post.factor" = postfrep[-sp]))
+                 "Error" = mse1rep, "Factor" = nofrep[,(sp-1)], "post.factor" = postfrep[-sp]))
   }
 }
